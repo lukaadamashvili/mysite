@@ -1,0 +1,114 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Football Auction</title><!-- Open in 2+ browser tabs (same browser): create a party in one, join with the 6-digit code in another. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#1a0b4d;--card:#ffffff14;--line:#ffffff22;--ac:#ffd23f;--ac2:#ff7a59;--mut:#c9bdff;--pitch1:#6a3ff0;--pitch2:#5f35e0;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:#fff;font:16px 'Outfit',system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(900px 500px at 10% -10%,#7a3cff88,transparent),radial-gradient(800px 500px at 100% 0,#ff5fa255,transparent),radial-gradient(700px 600px at 50% 120%,#2f7bff44,transparent),var(--bg);background-attachment:fixed}
+#app{max-width:1000px;margin:auto;padding:20px 16px 40px;animation:in .5s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}@keyframes pulse{50%{opacity:.55}}
+h1{margin:.2em 0;font-size:clamp(28px,6vw,44px);font-weight:800;letter-spacing:-.5px}h1 b{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}h2{margin:.2em 0 .5em;font-size:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin:12px 0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px #0004}
+.mut{color:var(--mut);font-size:14px}
+input,select{width:100%;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:#12063a99;color:#fff;font:inherit;margin:6px 0;outline:0;transition:.2s}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 4px #ffd23f22}#jc{letter-spacing:8px;text-align:center;font-weight:800;font-size:22px}
+button{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#2a1060;border:0;border-radius:14px;padding:14px 20px;font:800 15px 'Outfit',sans-serif;letter-spacing:.5px;cursor:pointer;transition:.2s;box-shadow:0 6px 20px #ff7a5944}
+button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 26px #ff7a5977}button:active{transform:scale(.97)}
+button.alt{background:#ffffff1c;color:#fff;box-shadow:none;border:1px solid var(--line)}button:disabled{opacity:.35;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.code{font:800 clamp(40px,10vw,64px) 'Outfit',monospace;letter-spacing:12px;text-align:center;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent;padding:6px 0}
+.pos{display:inline-block;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#2a1060;border-radius:999px;padding:3px 14px;font-weight:800;letter-spacing:1px}
+.pc{text-align:center;background:linear-gradient(160deg,#ffffff24,#ffffff0a);position:relative;overflow:hidden}.pc:before{content:"";position:absolute;inset:-50% -20% auto;height:80%;background:radial-gradient(closest-side,#ffd23f33,transparent)}
+.pc>*{position:relative}.pc h2{font-size:28px;margin:.3em 0 0}
+.ovr{font:800 84px 'Outfit',sans-serif;line-height:1;background:linear-gradient(180deg,#fff,var(--ac));-webkit-background-clip:text;background-clip:text;color:transparent;margin:6px 0}
+.bid{font:800 44px 'Outfit',sans-serif}.res{font:800 26px 'Outfit',sans-serif;color:var(--ac);margin:14px 0;animation:pop .5s}
+.bar{height:10px;background:#0004;border-radius:99px;margin:12px 0 4px;overflow:hidden}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--ac2),var(--ac));border-radius:99px;transition:width .25s linear}
+#tm{animation:pulse 1.2s infinite}.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}.btns button{min-width:84px}.out{background:linear-gradient(135deg,#ff4d6d,#d62855)!important;color:#fff!important}
+.pitch{position:relative;aspect-ratio:3/4;border-radius:22px;border:3px solid #ffffff55;overflow:hidden;background:repeating-linear-gradient(0deg,var(--pitch1) 0 12.5%,var(--pitch2) 12.5% 25%);box-shadow:0 14px 40px #0006}
+.pitch:before{content:"";position:absolute;left:0;right:0;top:50%;border-top:3px solid #fff7}.pitch:after{content:"";position:absolute;left:35%;top:38%;width:30%;aspect-ratio:1;border:3px solid #fff7;border-radius:50%}
+.box{position:absolute;left:25%;right:25%;height:14%;border:3px solid #fff7;z-index:0}.box.t{top:0;border-top:0}.box.b{bottom:0;border-bottom:0}
+.sl{position:absolute;transform:translate(-50%,-50%);text-align:center;font-size:11px;font-weight:600;width:70px;z-index:1;text-shadow:0 1px 4px #000a}
+.sl i{display:flex;margin:0 auto 3px;width:40px;height:40px;border-radius:50%;background:#ffffff26;border:2px dashed #fff9;align-items:center;justify-content:center;font:800 13px 'Outfit',sans-serif;font-style:normal}
+.sl.f i{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#2a1060;border:2px solid #fff;animation:pop .45s;box-shadow:0 4px 14px #0007}
+.mg{display:flex;justify-content:space-between;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}.mg:last-child{border:0}
+table{width:100%;border-collapse:collapse}td,th{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line)}td:nth-child(2),th:nth-child(2){text-align:left}th{color:var(--mut);font-weight:600;font-size:13px}tr:first-child+tr td{color:var(--ac);font-weight:800}
+.err{color:#ff9aa8;min-height:1.3em}label{display:block;margin-top:8px}
+</style>
+</head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app'),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ---- 2000 generated (fictional) players: 1000 current + 1000 all-time ----
+let seed=7;const r0=()=>(seed=seed*16807%2147483647)/2147483647,pk=a=>a[r0()*a.length|0];
+const A='Ar Ben Cal Dan Eri Fil Gab Han Ivo Jon Kas Leo Mar Nel Oli Pau Rui Sam Tom Vic Yan Zed'.split(' '),B='dro mas vel ton rik sen lio ban kov ret mir dal ner gui sko zar'.split(' '),C='ez ov er ini sson ado ier ich ano ley un ard'.split(' ');
+const PL=[];for(let i=0;i<2000;i++){const r=r0(),cur=i<1000,s=pk(B);PL.push({n:pk(A)[0]+'. '+s[0].toUpperCase()+s.slice(1)+pk(C),e:cur?'cur':'all',p:r<.1?'GK':r<.43?'DEF':r<.73?'MID':'FWD',o:cur?60+Math.floor(Math.pow(r0(),2.2)*34):70+Math.floor(Math.pow(r0(),1.8)*27)})}
+const NEED={GK:1,DEF:4,MID:3,FWD:3},LAY={FWD:[15,[20,50,80]],MID:[42,[20,50,80]],DEF:[68,[12,37,63,88]],GK:[90,[50]]};
+// ---- state ----
+let S=null,R=null,host=false,code='',view='home',err='',nm='',live=true,used=new Set(),W={},tk=0;
+const me={id:Math.random().toString(36).slice(2,8)};
+const mx=m=>m.b-(10-m.sq.length),cnt=(m,p)=>m.sq.filter(i=>PL[i].p===p).length,open=(m,p)=>m.sq.length<11&&cnt(m,p)<NEED[p];
+const mine=()=>S&&S.m.find(m=>m.id===me.id);
+async function conn(c){try{if(!window.BroadcastChannel)return false;const ch=new BroadcastChannel('fbauction'+c);
+ R={emit:(t,d)=>{ch.postMessage({t,d});return Promise.resolve()},leave:()=>ch.close()};
+ ch.onmessage=ev=>{const {t,d}=ev.data||{};if(t==='c'&&host)hdl(d);else if(t==='h'&&!host&&d){S=d;if(S.cur&&S.cur.left!=null)S.cur.end=Date.now()+S.cur.left;if(view==='wait')view='game';render()}};return true}catch(e){return false}}
+function bc(){if(S.cur)S.cur.left=Math.max(0,S.cur.end-Date.now());if(R)R.emit('h',S).catch(()=>{});render()}
+function snd(d){if(host)hdl({...d,id:me.id});else R&&R.emit('c',{...d,id:me.id}).catch(()=>{})}
+function addM(id,n,bot){S.m.push({id,n:n.slice(0,20),b:100,sq:[],out:0,bot:bot?1:0})}
+function hdl(d){if(!S||!d||typeof d.id!=='string')return;const m=S.m.find(x=>x.id===d.id),c=S.cur;
+ if(d.t==='join'){if(!m&&S.ph==='lobby'&&S.m.length<10)addM(d.id,String(d.n||'Manager'));bc()}
+ else if(m&&S.ph==='auc'&&c&&!c.res){if(d.t==='bid')bid(m,d.amt);if(d.t==='out'){m.out=1;settle();bc()}}}
+function bid(m,a){const c=S.cur;a=Math.floor(a);if(m.out||!(a>c.bid)||a>mx(m)||!open(m,PL[c.p].p))return;c.bid=a;c.by=m.id;c.end=Math.max(c.end,Date.now()+6000);settle();bc()}
+function start(){S.ph='auc';used=new Set();nextP()}
+function nextP(){if(S.m.every(m=>m.sq.length>=11))return fin();const e=S.cfg.era,ok=[];
+ PL.forEach((p,i)=>{if(!used.has(i)&&(e==='both'||p.e===e)&&S.m.some(m=>open(m,p.p)))ok.push(i)});if(!ok.length)return fin();
+ const i=ok[Math.random()*ok.length|0],p=PL[i];used.add(i);S.cur={p:i,bid:0,by:null,end:Date.now()+15000};
+ S.m.forEach(m=>{m.out=open(m,p.p)&&mx(m)>=1?0:1;W[m.id]=Math.max(1,Math.round((p.o-58)*(.5+Math.random()*.7)))});settle();bc()}
+function settle(force){const c=S.cur;if(!c||c.res)return;
+ if(force||!S.m.some(m=>!m.out&&m.id!==c.by)){if(c.by){const w=S.m.find(m=>m.id===c.by);w.b-=c.bid;w.sq.push(c.p);c.res='sold'}else c.res='unsold';bc();setTimeout(nextP,2500)}}
+function fin(){S.ph='res';S.cur=null;const st=S.m.map(m=>({n:m.n,s:m.sq.reduce((a,i)=>a+PL[i].o,0)/11,pt:0,gf:0,ga:0,w:0,d:0,l:0}));
+ const poi=l=>{let k=0,p=1,L=Math.exp(-l);do{k++;p*=Math.random()}while(p>L);return k-1};
+ for(const a of st)for(const b of st)if(a!==b){const ga=poi(Math.min(3.5,Math.max(.4,1.4+(a.s-b.s)/6))),gb=poi(Math.min(3.5,Math.max(.4,1.4+(b.s-a.s)/6)));a.gf+=ga;a.ga+=gb;b.gf+=gb;b.ga+=ga;
+  if(ga>gb){a.pt+=3;a.w++;b.l++}else if(ga<gb){b.pt+=3;b.w++;a.l++}else{a.pt++;b.pt++;a.d++;b.d++}}
+ st.sort((x,y)=>y.pt-x.pt||(y.gf-y.ga)-(x.gf-x.ga)||y.gf-x.gf);S.tab=st.map(x=>({...x,s:Math.round(x.s)}));bc()}
+setInterval(()=>{if(!host||!S||S.ph!=='auc'||!S.cur||S.cur.res)return;const c=S.cur;
+ S.m.forEach(m=>{if(!m.bot||m.out||m.id===c.by)return;if(c.bid>=W[m.id]||mx(m)<=c.bid)m.out=1;else if(Math.random()<.35)bid(m,Math.min(W[m.id],mx(m),c.bid+1+(Math.random()*3|0)))});
+ if(Date.now()>=c.end)settle(true);else settle();if(++tk%2===0)bc()},500);
+setInterval(()=>{const c=S&&S.cur;if(!c||c.res||S.ph!=='auc')return;const l=Math.max(0,c.end-Date.now()),t=$('#tm'),b=$('#tb');if(t)t.textContent=(l/1000).toFixed(1)+'s';if(b)b.style.width=Math.min(100,l/150)+'%'},250);
+// ---- actions ----
+async function create(){nm=($('#nm').value||'').trim();if(!nm)return setErr('Enter a manager name');code=String(100000+Math.floor(Math.random()*900000));
+ host=true;S={ph:'lobby',cfg:{era:'both',mode:'classic'},m:[]};addM(me.id,nm);live=await conn(code);view='game';render()}
+async function join(){nm=($('#nm').value||'').trim();const c=($('#jc').value||'').trim();if(!nm)return setErr('Enter a manager name');if(!/^\d{6}$/.test(c))return setErr('Enter the 6-digit party code');
+ host=false;S=null;code=c;if(!await conn(c)){R=null;return setErr('Multiplayer needs a browser with BroadcastChannel support.')}
+ view='wait';render();let n=0;const t=setInterval(()=>{if(S||view!=='wait'){clearInterval(t);return}if(++n>5){clearInterval(t);leave('Party not found, full, or already started.');return}snd({t:'join',n:nm})},1500);snd({t:'join',n:nm})}
+function leave(e){try{R&&R.leave()}catch(_){}R=null;S=null;host=false;view='home';err=e||'';render()}
+const setErr=m=>{$('#er').textContent=m};
+app.onclick=e=>{const t=e.target.closest('button');if(!t)return;const a=t.dataset.a,c=S&&S.cur;
+ if(a==='create')create();else if(a==='join')join();else if(a==='leave')leave();
+ else if(a==='bot'&&S.m.length<10){addM('b'+Math.random().toString(36).slice(2,6),'Bot '+S.m.filter(m=>m.bot).length.toString().replace(/^/,'')+'-'+(S.m.length+1),1);bc()}
+ else if(a==='start'&&S.m.length>=2)start();
+ else if(a==='copy')navigator.clipboard&&navigator.clipboard.writeText(code).catch(()=>{});
+ else if(t.dataset.b&&c)snd({t:'bid',amt:c.bid+ +t.dataset.b});else if(t.dataset.o)snd({t:'out'})};
+app.onchange=e=>{if(host&&S&&S.ph==='lobby'&&e.target.dataset.k){S.cfg[e.target.dataset.k]=e.target.value;bc()}};
+// ---- views ----
+function pitch(m){let h='';for(const p of['FWD','MID','DEF','GK']){const [y,xs]=LAY[p],ps=m.sq.filter(i=>PL[i].p===p);xs.forEach((x,k)=>{const q=PL[ps[k]];
+ h+=`<div class="sl ${q?'f':''}" style="left:${x}%;top:${y}%"><i>${q?(S.cfg.mode==='blind'&&S.ph!=='res'?p:q.o):p}</i>${q?esc(q.n):''}</div>`})}return`<div class=pitch><div class='box t'></div><div class='box b'></div>${h}</div>`}
+function render(){if(view==='home'||!S){app.innerHTML=`<h1>⚽ Football <b>Auction</b></h1><p class=mut>100 credits. 11 players. 2–10 managers. ${PL.length} players: current + all-time.</p>
+ <div class=card><h2>Your name</h2><input id=nm maxlength=20 placeholder="Manager name" value="${esc(nm)}"><div id=er class=err>${esc(err)}</div></div>
+ <div class=grid><div class=card><h2>Create party</h2><p class=mut>You get a 6-digit code to share.</p><button data-a=create>CREATE PARTY</button></div>
+ <div class=card><h2>Join party</h2><input id=jc inputmode=numeric maxlength=6 placeholder="6-digit code"><button data-a=join>JOIN PARTY</button></div></div>`;return}
+ if(view==='wait'){app.innerHTML=`<h1>Joining ${esc(code)}…</h1>`;return}
+ if(S.ph==='lobby')return lobby();if(S.ph==='auc')return auc();res()}
+function lobby(){const e=S.cfg;app.innerHTML=`<h1>Party lobby</h1><div class=card><div class=mut style="text-align:center">Share this code (2–10 managers)</div><div class=code>${code}</div>
+ <div style="text-align:center"><button class=alt data-a=copy>Copy code</button></div>${live?'':'<p class=mut></p>'}</div>
+ <div class=grid><div class=card><h2>Managers ${S.m.length}/10</h2>${S.m.map(m=>`<div class=mg><span>${m.id===me.id?'⭐ ':''}${esc(m.n)}${m.bot?' 🤖':''}</span><span class=mut>${m===S.m[0]?'Host':''}</span></div>`).join('')}</div>
+ <div class=card><h2>Settings</h2><label class=mut>Players era</label><select data-k=era ${host?'':'disabled'}><option value=both ${e.era==='both'?'selected':''}>All 2000 (current + all-time)</option><option value=cur ${e.era==='cur'?'selected':''}>Current players (1000)</option><option value=all ${e.era==='all'?'selected':''}>All-time (1000)</option></select>
+ <label class=mut>Game mode</label><select data-k=mode ${host?'':'disabled'}><option value=classic ${e.mode==='classic'?'selected':''}>Classic</option><option value=blind ${e.mode==='blind'?'selected':''}>Blind (hides overall)</option></select></div></div>
+ <div class=row>${host?`<button data-a=start ${S.m.length<2?'disabled':''}>START AUCTION</button><button class=alt data-a=bot ${S.m.length>=10?'disabled':''}>+ Add bot</button>`:'<div class=mut>Waiting for host…</div>'}<button class=alt data-a=leave>Leave</button></div>`}
+function auc(){const c=S.cur,m=mine();let card='<div class=card>Next player…</div>';
+ if(c){const p=PL[c.p],ld=S.m.find(x=>x.id===c.by),can=!c.res&&m&&!m.out,dis=k=>m&&c.bid+k>mx(m)?'disabled':'';
+ card=`<div class="card pc"><span class=pos>${p.p}</span><h2>${esc(p.n)}</h2><div class=mut>${p.e==='all'?'All-time':'Current'}</div><div class=ovr>${S.cfg.mode==='blind'?'?':p.o}</div>
+ <div class=mut>CURRENT BID</div><div class=bid>${c.bid} cr</div><div class=mut>${ld?esc(ld.n):'No bids yet'}</div><div class=bar><i id=tb></i></div><div id=tm class=mut></div>
+ ${c.res?`<div class=res>${c.res==='sold'?'SOLD → '+esc(ld.n)+' · '+c.bid+' cr':'UNSOLD'}</div>`:can?`<div class=btns><button data-b=1 ${dis(1)}>+1</button><button data-b=10 ${dis(10)}>+10</button><button data-b=20 ${dis(20)}>+20</button><button class=out data-o=1>I'M OUT</button></div>`:`<div class=mut>${m&&m.out?"You're out of this one":'Watching'}</div>`}</div>`}
+ app.innerHTML=`<div class=row><h1>Auction · ${code}</h1><div style="text-align:right"><b>${m?m.b:0} cr</b> left · ${m?m.sq.length:0}/11</div></div><div class=grid><div>${card}<div class=card><h2>Managers</h2>${S.m.map(x=>`<div class=mg><span>${x.id===(c&&c.by)?'🔥 ':''}${esc(x.n)}${x.bot?' 🤖':''}</span><span class=mut>${x.b} cr · ${x.sq.length}/11</span></div>`).join('')}</div></div><div><h2>Your XI</h2>${m?pitch(m):''}</div></div>`}
+function res(){const t=S.tab||[];app.innerHTML=`<h1>🏆 ${t[0]?esc(t[0].n):''} wins the league!</h1><div class=card><table><tr><th>#</th><th>Manager</th><th>OVR</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>${t.map((x,i)=>`<tr><td>${i+1}</td><td>${esc(x.n)}</td><td>${x.s}</td><td>${x.w}</td><td>${x.d}</td><td>${x.l}</td><td>${x.gf-x.ga}</td><td><b>${x.pt}</b></td></tr>`).join('')}</table></div>
+ <div class=grid><div><h2>Your XI</h2>${mine()?pitch(mine()):''}</div><div class=card><p class=mut>Teams played a home-and-away league. Result depends on squad strength plus luck.</p><button data-a=leave>Back to home</button></div></div>`}
+render();
+</script></body></html>
